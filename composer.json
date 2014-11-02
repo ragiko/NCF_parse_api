@@ -1,0 +1,13 @@
+{
+    "name": "root/parse_api",
+    "authors": [
+        {
+            "name": "a",
+            "email": "a@example.com"
+        }
+    ],
+    "require" : {
+        "parse/php-sdk" : "1.0.*",
+        "slim/slim": "2.4.3"
+    }
+}
