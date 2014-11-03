@@ -22,9 +22,15 @@ $app->get('/hello/:name', function ($name) {
     echo "Hello, $name";
 
     $query = new ParseQuery("Tag");
+    $startdate = new DateTime("2014-11-03T00:19:04.714Z");
+    $query->greaterThanOrEqualTo('createdAt', $startdate );
+
     try {
           $r = $query->find();
+
+          echo "<pre>";
           print_r($r);
+          echo "</pre>";
     } catch (ParseException $ex) {
     }
 });
