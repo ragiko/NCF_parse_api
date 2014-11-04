@@ -159,7 +159,7 @@ $app->get('/gracenote', function () use ($app) {
         $api->setCountry("jpn");
         $api->setLanguage("jpn");
     
-        $musics = $api->createStationFromMood(65322)["ALBUM"];
+        $musics = $api->createStationFromMood($moodid)["ALBUM"];
     } catch (Exception $e) {
         $res = json_encode(array("status" => "error [$e]", "data" => array()));
         echo $res;
