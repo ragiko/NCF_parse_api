@@ -13,7 +13,6 @@ use Parse\ParsegeoPoint;
 ParseClient::initialize('LicvGZYQ3x9rDtfiDnaNy42GmIJdP0TuoVBJBFZi', 'QmaCbGyfU0chwYJ4n77cM1lv3pZeeVxNfa0FGrLE', 'pwLv0m1SioJBnuqlI3mvZ0Cv6jDRoC0BIRImMgGO');
 
 $app->get('/meet', function () use ($app) {
-    echo "Start";
     // Sample input data
     // 3RWoUwexI
     // 2014-11-03T02:09:24.620Z
