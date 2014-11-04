@@ -41,46 +41,45 @@ function getQueryBetweenMinutes($query, $date, $between_min) {
     return $q; 
 }
 
-$app->get('/hello/:name', function ($name) {
-    echo "Hello, $name";
+$app->get('/', function () {
+    echo "Start";
 
     // request
-    $object_name = "Tag";
     $user_id = "3RWoUwexIC";
-    $start_date = new DateTime("2014-11-03T02:09:24.620Z");
-    $end_date = new DateTime("2014-11-03T02:09:39.895Z");
+    $start_date = new DateTime("2014-11-03T02:09:24.620Z"); // DEBUG
+    $end_date = new DateTime("2014-11-03T02:09:39.895Z");   // DEBUG
 
     // userの取得
     $user_query = ParseUser::query();
-    $user = $user_query->get($user_id);
+    $my_user = $user_query->get($user_id);
 
     // ユーザの期間内のGPSデータ取得
-    $query = new ParseQuery($object_name);
+    $query = new ParseQuery("Tag");
     $query = getQueryBetweenDate($query, $start_date, $end_date);
-    $query->EqualTo("user", $user);
-    $user_geos = $query->find();
+    $query->EqualTo("user", $my_user);
+    $user_geo_objects = $query->find();
 
     // new を loop内で行わない為に
-    $query = new ParseQuery($object_name);
-    $_query = clone $query;
+    $_query = new ParseQuery("Tag");
 
-    $user_ids = [];
+    $other_user_ids = [];
     // 取得したGPSデータごとに時間と距離の近いユーザを算出
-    foreach ($user_geos as $user_geo) {
+    foreach ($user_geo_objects as $user_geo_object) {
         $query = $_query;
 
-        $date = $user_geo->getCreatedAt();
-        $user_geo_pt = $user_geo->get("location");
+        $date = $user_geo_object->getCreatedAt();
+        $user_geo_pt = $user_geo_object->get("location");
         $between_min = 1;
+        $around_kilometer = 1;
 
         // 時間と距離の近いユーザを算出
         $query = getQueryBetweenMinutes($query, $date, $between_min);
-        $query->notEqualTo("user", $user);
-        $query->withinKilometers("location", $user_geo_pt, 1);
+        $query->notEqualTo("user", $my_user);
+        $query->withinKilometers("location", $user_geo_pt, $around_kilometer);
         $gps_objects = $query->find("user");
 
         foreach ($gps_objects as $gps_object) {
-            $user_ids[] = $gps_object->get("user")->getObjectId();
+            $other_user_ids[] = $gps_object->get("user")->getObjectId();
 
             // DEBUG
             // echo "<pre>";
@@ -92,17 +91,17 @@ $app->get('/hello/:name', function ($name) {
             // echo "</pre>";
             // echo "<hr>";
         }
-
     }
 
+    // TODO: おそ過ぎ、この上部の時点で10sかかる
     // TODO: 上と同じ処理なのできれいに出来そう(userの取得を関数化??)
     // TODO: queryのsetter, getterあってもいい(モデルの)
-    $user_ids = array_unique($user_ids);
+    $other_user_ids = array_unique($other_user_ids);
 
-    $youtube_ids = [];
+    $user_musics = [];
     $_query = new ParseQuery("PlayList");
 
-    foreach ($user_ids as $user_id) {
+    foreach ($other_user_ids as $user_id) {
         // userの取得
         $user_query = ParseUser::query();
         $user = $user_query->get($user_id);
@@ -114,14 +113,14 @@ $app->get('/hello/:name', function ($name) {
         $playlist_objects = $query->find();
 
         foreach ($playlist_objects as $playlist_object) {
-            $youtube_ids[] = array(
-                $playlist_object->get("youtube_id"),
-                $user_id
+            $user_musics[] = array(
+                "youtube_id" => $playlist_object->get("youtube_id"),
+                "user_id" => $user_id
             );
         }
     }
 
-    print_r($youtube_ids);
+    print_r($user_musics);
     
     // 10秒かかかるww 
 });
