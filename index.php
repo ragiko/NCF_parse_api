@@ -128,7 +128,23 @@ $app->get('/', function () {
 /*
  * gracenote
  */
-$app->get('/gracenote', function () {
+$app->get('/gracenote', function () use ($app) {
+    $input = $app->request()->get();
+
+    if (!isset($input["moodid"])) {
+        $res = json_encode(array("status" => "error [Mood id is nothing]", "data" => array()));
+        echo $res;
+        return;
+    }
+
+    if (!isMoodIdExist($input["moodid"])) {
+        $res = json_encode(array("status" => "error [Mood id is wrong]", "data" => array()));
+        echo $res;
+        return;
+    }
+
+    $moodid = $input["moodid"];
+
     $clientID  = "3425280"; // Put your Client ID here.
     $clientTag = "CC3C40AF6BD3CB6C78CE6D5468603199"; // Put your Client Tag here.
 
@@ -180,8 +196,41 @@ $app->get('/gracenote', function () {
     }
 
     // TODO 文字数多いやつのけた方がいいかも
-    // TODO youtubeで見つかったやつにランダム
+    // TODO クラスかすべし
 });
+
+function isMoodIdExist($moodid) {
+    $moodids = array(
+        65322,
+        65323,
+        65324,
+        42942,
+        42946,
+        65325,
+        42954,
+        42947,
+        65326,
+        65327,
+        42948,
+        42949,
+        65328,
+        65329,
+        42953,
+        42955,
+        42951,
+        42958,
+        65330,
+        42960,
+        42961,
+        42945,
+        65331,
+        65332,
+        65333
+    );
+
+    return in_array($moodid, $moodids);
+}
+
 
 /*
  * youtube
