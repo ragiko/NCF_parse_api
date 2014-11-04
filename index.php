@@ -93,9 +93,6 @@ $app->get('/', function () {
         }
     }
 
-    // TODO: おそ過ぎ、この上部の時点で10sかかる
-    // TODO: 上と同じ処理なのできれいに出来そう(userの取得を関数化??)
-    // TODO: queryのsetter, getterあってもいい(モデルの)
     $other_user_ids = array_unique($other_user_ids);
 
     $user_musics = [];
