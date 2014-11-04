@@ -21,11 +21,11 @@ $app->get('/music', function () use ($app) {
     $clientID  = "3425280"; // Put your Client ID here.
     $clientTag = "CC3C40AF6BD3CB6C78CE6D5468603199"; // Put your Client Tag here.
 
-    try {
-        /* You first need to register your client information in order to get a userID.
+    /* You first need to register your client information in order to get a userID.
         Best practice is for an application to call this only once, and then cache the userID in
         persistent storage, then only use the userID for subsequent API calls. The class will cache
         it for just this session on your behalf, but you should store it yourself. */
+    try {
         $api = new Gracenote\WebAPI\GracenoteRhythm($clientID, $clientTag); // If you have a userID, you can specify as third parameter to constructor.
         $userID = $api->register();
 
@@ -48,21 +48,19 @@ $app->get('/music', function () use ($app) {
         }
     }
 
-    if (isset($youtube_id)) {
-        $data = array(
-            "artist" => $artist,
-            "title" => $music_title,
-            "youtube_id" => $youtube_id
-        );
-
-        echo jsonResponse("success", $data);
-        return;
-    }
-    else {
+    if (!isset($youtube_id)) {
         echo jsonResponse("error [No youtube_id]", array());
         return;
     }
 
+    $data = array(
+        "artist" => $artist,
+        "title" => $music_title,
+        "youtube_id" => $youtube_id
+    );
+
+    echo jsonResponse("success", $data);
+    
     // TODO 文字数多いやつのけた方がいいかも
     // TODO UNICODEエンコードしてない
 });
