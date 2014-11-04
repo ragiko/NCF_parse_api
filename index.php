@@ -1,5 +1,6 @@
 <?php
 require 'vendor/autoload.php';
+
 use Parse\ParseClient;
 use Parse\ParseUser;
 use Parse\ParseQuery;
@@ -63,6 +64,7 @@ $app->get('/hello/:name', function ($name) {
     $query = new ParseQuery($object_name);
     $_query = clone $query;
 
+    $user_ids = [];
     // 取得したGPSデータごとに時間と距離の近いユーザを算出
     foreach ($user_geos as $user_geo) {
         $query = $_query;
@@ -78,27 +80,50 @@ $app->get('/hello/:name', function ($name) {
         $gps_objects = $query->find("user");
 
         foreach ($gps_objects as $gps_object) {
-            echo "<pre>";
-            print_r($user_geo->getCreatedAt());
-            echo "<br>";
-            print_r($gps_object->get("user")->getObjectId());
-            echo "<br>";
-            print_r($gps_object->getCreatedAt());
-            echo "</pre>";
-            echo "<hr>";
+            $user_ids[] = $gps_object->get("user")->getObjectId();
+
+            // DEBUG
+            // echo "<pre>";
+            // print_r($user_geo->getCreatedAt());
+            // echo "<br>";
+            // print_r($gps_object->get("user")->getObjectId());
+            // echo "<br>";
+            // print_r($gps_object->getCreatedAt());
+            // echo "</pre>";
+            // echo "<hr>";
+        }
+
+    }
+
+    // TODO: 上と同じ処理なのできれいに出来そう(userの取得を関数化??)
+    // TODO: queryのsetter, getterあってもいい(モデルの)
+    $user_ids = array_unique($user_ids);
+
+    $youtube_ids = [];
+    $_query = new ParseQuery("PlayList");
+
+    foreach ($user_ids as $user_id) {
+        // userの取得
+        $user_query = ParseUser::query();
+        $user = $user_query->get($user_id);
+
+        $query = $_query;
+        $query->equalTo("user", $user);
+        $query->equalTo("share", true);
+        // TODO: 抽出当たりのアルゴリズムを改良、とりあえず全部取る
+        $playlist_objects = $query->find();
+
+        foreach ($playlist_objects as $playlist_object) {
+            $youtube_ids[] = array(
+                $playlist_object->get("youtube_id"),
+                $user_id
+            );
         }
     }
 
-    // $between_min = 3;
-    // $date = new DateTime("2014-11-03T00:19:04.614Z");
-
-    // $query = getQueryBetweenMinutes($query, $date, $between_min);
-
-    // $r = $query->find();
-
-    // echo "<pre>";
-    // print_r($r);
-    // echo "</pre>";
+    print_r($youtube_ids);
+    
+    // 10秒かかかるww 
 });
 
 $app->run();
