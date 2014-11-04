@@ -8,6 +8,7 @@
     ],
     "require" : {
         "parse/php-sdk" : "1.0.*",
-        "slim/slim": "2.4.3"
+        "slim/slim": "2.4.3",
+        "google/apiclient": "1.0.*@beta"
     }
 }
