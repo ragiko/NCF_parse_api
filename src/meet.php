@@ -1,6 +1,6 @@
 <?php
 
-include __DIR__ . '/../helper/MeetHelper.php';
+require __DIR__ . '/../helper/MeetHelper.php';
 
 use Parse\ParseClient;
 use Parse\ParseUser;
@@ -12,17 +12,43 @@ use Parse\ParsegeoPoint;
 
 ParseClient::initialize('LicvGZYQ3x9rDtfiDnaNy42GmIJdP0TuoVBJBFZi', 'QmaCbGyfU0chwYJ4n77cM1lv3pZeeVxNfa0FGrLE', 'pwLv0m1SioJBnuqlI3mvZ0Cv6jDRoC0BIRImMgGO');
 
-$app->get('/meet', function () {
+$app->get('/meet', function () use ($app) {
     echo "Start";
+    // Sample input data
+    // 3RWoUwexI
+    // 2014-11-03T02:09:24.620Z
+    // 2014-11-03T02:09:39.895Z
 
-    // request
-    $user_id = "3RWoUwexIC";
-    $start_date = new DateTime("2014-11-03T02:09:24.620Z"); // DEBUG
-    $end_date = new DateTime("2014-11-03T02:09:39.895Z");   // DEBUG
+    $input = $app->request()->get();
 
-    // userの取得
-    $user_query = ParseUser::query();
-    $my_user = $user_query->get($user_id);
+    if (!issetAllParams($input, array("user_id", "start_date", "end_date"))) {
+        echo jsonResponse("NotParameterError", array());
+        return;
+    }
+
+    $input_user_id= $input["user_id"];
+    $input_start_date = $input["start_date"];
+    $input_end_date = $input["end_date"];
+
+    // Dateが正しいかチェック
+    try {
+        $start_date = new DateTime($input_start_date); // DEBUG
+        $end_date = new DateTime($input_end_date);   // DEBUG
+    } catch (Exception $e) {
+        echo jsonResponse("$e", array());
+        return;
+    }
+
+    // Userが正しいかチェック
+    try {
+        // userの取得
+        $user_id = $input_user_id;
+        $user_query = ParseUser::query();
+        $my_user = $user_query->get($user_id);
+    } catch (Exception $e) {
+        echo jsonResponse("$e", array());
+        return;
+    }
 
     // ユーザの期間内のGPSデータ取得
     $query = new ParseQuery("Tag");
@@ -88,9 +114,7 @@ $app->get('/meet', function () {
         }
     }
 
-    echo "<pre>";
-    print_r($user_musics);
-    echo "</pre>";
+    echo jsonResponse("success", $user_musics);
     
     // 10秒かかかるww 
 });

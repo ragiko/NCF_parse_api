@@ -1,23 +1,18 @@
 <?php
 
-include __DIR__ . "/../gracenote-rhythm/GracenoteRhythm.class.php";
-include __DIR__ . '/../helper/MusicHelper.php';
+require __DIR__ . "/../gracenote-rhythm/GracenoteRhythm.class.php";
+require __DIR__ . '/../helper/MusicHelper.php';
 
-/*
- * gracenote
- */
 $app->get('/music', function () use ($app) {
     $input = $app->request()->get();
 
     if (!isset($input["moodid"])) {
-        $res = json_encode(array("status" => "error [Mood id is nothing]", "data" => array()));
-        echo $res;
+        echo jsonResponse("error [Mood id is nothing]", array());
         return;
     }
 
     if (!isMoodIdExist($input["moodid"])) {
-        $res = json_encode(array("status" => "error [Mood id is wrong]", "data" => array()));
-        echo $res;
+        echo jsonResponse("error [Mood id is wrong]", array());
         return;
     }
 
@@ -39,8 +34,7 @@ $app->get('/music', function () use ($app) {
     
         $musics = $api->createStationFromMood($moodid)["ALBUM"];
     } catch (Exception $e) {
-        $res = json_encode(array("status" => "error [$e]", "data" => array()));
-        echo $res;
+        echo jsonResponse("error [$e]", array());
         return;
     }
 
@@ -55,26 +49,20 @@ $app->get('/music', function () use ($app) {
     }
 
     if (isset($youtube_id)) {
-        $res = json_encode(array(
-            "status" => "success", 
-            "data" => 
-            array(
-                "artist" => $artist,
-                "title" => $music_title,
-                "youtube_id" => $youtube_id
-            )
-        ));
-        echo $res;
+        $data = array(
+            "artist" => $artist,
+            "title" => $music_title,
+            "youtube_id" => $youtube_id
+        );
+
+        echo jsonResponse("success", $data);
         return;
     }
     else {
-        $res = json_encode(array("status" => "error [No youtube_id]", "data" => array()));
-        echo $res;
+        echo jsonResponse("error [No youtube_id]", array());
         return;
     }
 
     // TODO 文字数多いやつのけた方がいいかも
-    // TODO クラスかすべし
+    // TODO UNICODEエンコードしてない
 });
-
-
