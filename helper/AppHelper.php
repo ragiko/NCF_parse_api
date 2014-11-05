@@ -9,25 +9,16 @@ function jsonResponse($status_str, $data_array) {
 // $check_params: チェックしたいパラメータ array(hoge1, hoge2, ...)
 function issetAllParams($req_params, $check_params) {
     $req_param_keys = array_keys($req_params);
-
+    
     // check empty
     if (!$req_param_keys) {
         return false;
     }
 
-    foreach ($req_param_keys as $req_param_key) {
-        // check parametar exist
-        if (!in_array($req_param_key, $check_params)) {
-            return false;
-        }
+    sort($req_param_keys);
+    sort($check_params);
 
-        // check parametar not ""
-        if ($req_params[$req_param_key] === "") {
-            return false;
-        }
-    }
-
-    return true;
+    return ($check_params == $req_param_keys); 
 }
 
 function prePr($array) {
