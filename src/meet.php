@@ -11,6 +11,8 @@ use Parse\ParseACL;
 use Parse\ParsegeoPoint;
 
 ParseClient::initialize('LicvGZYQ3x9rDtfiDnaNy42GmIJdP0TuoVBJBFZi', 'QmaCbGyfU0chwYJ4n77cM1lv3pZeeVxNfa0FGrLE', 'pwLv0m1SioJBnuqlI3mvZ0Cv6jDRoC0BIRImMgGO');
+// ParseClientのデフォルトのtimestampがUTCのため
+date_default_timezone_set('UTC');
 
 $app->get('/meet', function () use ($app) {
     // Sample input data
@@ -55,6 +57,11 @@ $app->get('/meet', function () use ($app) {
     $query->EqualTo("user", $my_user);
     $user_geo_objects = $query->find();
 
+    $between_min = 5; // 5分間隔
+
+    // GeoObjectの数をよしなに減らす
+    $user_geo_objects = cutGeoObjectFromBetweenTime($user_geo_objects, $start_date, $end_date, $between_min);
+    
     // new を loop内で行わない為に
     $_query = new ParseQuery("Tag");
 
@@ -118,4 +125,7 @@ $app->get('/meet', function () use ($app) {
     // 10秒かかかるww 
 });
 
+// test uri
+$app->get('/test', function () use ($app) {
+});
 
