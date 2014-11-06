@@ -4,6 +4,7 @@ require __DIR__ . "/../gracenote-rhythm/GracenoteRhythm.class.php";
 require __DIR__ . '/../helper/MusicHelper.php';
 
 use Parse\ParseObject;
+use Parse\ParseQuery;
 use Parse\ParseUser;
 
 $app->get('/music', function () use ($app) {
@@ -75,13 +76,20 @@ $app->get('/music', function () use ($app) {
 
     // Playlistにデータを挿入
     try {
-        $play_list = new ParseObject("PlayList");
-        $play_list->set("artist_name", $artist);
-        $play_list->set("music_title", $music_title);
-        $play_list->set("youtube_id", $youtube_id);
-        $play_list->set("user", $my_user);
-        $play_list->set("share", false);
-        $play_list->save();
+        // Playlistにデータがあるかどうかを確認
+        $query = new ParseQuery("PlayList");
+        $query->equalTo("user", $my_user);
+        $exist_play_list = $query->find();
+
+        if (!existPlayList($youtube_id, $exist_play_list)) {
+            $play_list = new ParseObject("PlayList");
+            $play_list->set("artist_name", $artist);
+            $play_list->set("music_title", $music_title);
+            $play_list->set("youtube_id", $youtube_id);
+            $play_list->set("user", $my_user);
+            $play_list->set("share", false);
+            $play_list->save();
+        }
     } catch (Exception $e) {
         echo jsonResponse("$e", array());
         return;
