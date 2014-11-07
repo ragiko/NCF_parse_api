@@ -17,11 +17,6 @@ date_default_timezone_set('UTC');
 
 
 $app->get('/meet', function () use ($app) {
-    // Sample input data
-    // 3RWoUwexI
-    // 2014-11-03T02:09:24.620Z
-    // 2014-11-03T02:09:39.895Z
-
     $input = $app->request()->get();
 
     if (!issetAllParams($input, array("user_id", "start_date", "end_date"))) {
@@ -35,8 +30,8 @@ $app->get('/meet', function () use ($app) {
 
     // Dateが正しいかチェック
     try {
-        $start_date = new DateTime($input_start_date); // DEBUG
-        $end_date = new DateTime($input_end_date);   // DEBUG
+        $start_date = new DateTime(jpnDateStrToUtcDateStr($input_start_date)); // DEBUG
+        $end_date = new DateTime(jpnDateStrToUtcDateStr($input_end_date));   // DEBUG
     } catch (Exception $e) {
         echo jsonResponse("$e", array());
         return;
@@ -132,24 +127,7 @@ $app->get('/meet', function () use ($app) {
 
 // test uri
 $app->get('/test/meet', function () use ($app) {
-    // $start_date = new DateTime("2014-11-06 10:19:10"); // DEBUG
-    // $end_date = new DateTime("2014-11-06 21:19:30");   // DEBUG
-    // $user_id = "iFtJtDtEW1";
-
-    // $user_query = ParseUser::query();
-    // $my_user = $user_query->get($user_id);
-
-    // // ユーザの期間内のGPSデータ取得
-    // $query = new ParseQuery("Tag");
-    // $query = getQueryBetweenDate($query, $start_date, $end_date);
-    // $query->EqualTo("user", $my_user);
-    // $geos = $query->find();
-
-    // // after DEBUG
-    // echo '<hr>';
-    // prePr(count($geos));
-    // foreach ($geos as $obj) {
-    //     prePr($obj->getCreatedAt());
-    // }
+    echo jpnDateStrToUtcDateStr("2014-11-05 20:53:40.0000000");
 });
+
 

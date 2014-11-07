@@ -87,3 +87,15 @@ function cutGeoObjectFromBetweenTime($geo_objects, $start_date, $end_date, $betw
     return $simple_gps_objs;
 }
 
+// 日本の標準時刻をUTCの標準時刻に変更
+function jpnDateStrToUtcDateStr($jpn_date_str) {
+    date_default_timezone_set('Asia/Tokyo');
+
+    $t = new DateTime($jpn_date_str);
+    $t->setTimeZone( new DateTimeZone('UTC'));
+
+    date_default_timezone_set('UTC');
+    return $t->format('Y-m-d H:i:s');
+}
+
+
