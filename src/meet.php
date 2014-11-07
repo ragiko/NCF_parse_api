@@ -117,8 +117,10 @@ $app->get('/meet', function () use ($app) {
 
         foreach ($playlist_objects as $playlist_object) {
             $user_musics[] = array(
+                "user_id" => $user_id,
+                "artist" => $playlist_object->get("artist_name"),
                 "youtube_id" => $playlist_object->get("youtube_id"),
-                "user_id" => $user_id
+                "title" => $playlist_object->get("music_title")
             );
         }
     }
