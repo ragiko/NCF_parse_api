@@ -157,15 +157,21 @@ class Mood {
             });
     }
 
+    public function chooseMusicIdByRnd() {
+        $m = $this->mood;
+        shuffle($m);
+        return $m[0]["moodid"];
+    }
+
     public function choosePositiveMusicIdByRnd() {
         $m = $this->getPositiveMusicId();
         shuffle($m);
-        return $m[0];
+        return $m[0]["moodid"];
     }
 
     public function chooseNegativeMusicIdByRnd() {
         $m = $this->getNegativeMusicId();
         shuffle($m);
-        return $m[0];
+        return $m[0]["moodid"];
     }
 }

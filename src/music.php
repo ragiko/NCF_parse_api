@@ -8,20 +8,28 @@ use Parse\ParseObject;
 use Parse\ParseQuery;
 use Parse\ParseUser;
 
-$app->get('/music', function () use ($app) {
+$app->get('/v2/music', function () use ($app) {
     $input = $app->request()->get();
 
-    if (!issetAllParams($input, array("moodid", "userid"))) {
+    if (!issetAllParams($input, array("timeid", "userid"))) {
         echo jsonResponse("NotParameterError", array());
         return;
     }
 
-    if (!isMoodIdExist($input["moodid"])) {
-        echo jsonResponse("error [Mood id is wrong]", array());
-        return;
+    // Moodidを選ぶ
+    $timeid = $input["timeid"];
+    $m = new Mood();
+
+    if ($timeid == 0) {
+        $moodid = $m->choosePositiveMusicIdByRnd();
+    }
+    else if ($timeid == 1) {
+        $moodid = $m->chooseNegativeMusicIdByRnd();
+    }
+    else {
+        $moodid = $m->chooseMusicIdByRnd();
     }
 
-    $moodid = $input["moodid"];
     $parse_user_id = $input["userid"];
 
     $clientID  = "3425280"; // Put your Client ID here.
@@ -102,7 +110,7 @@ $app->get('/music', function () use ($app) {
     // TODO UNICODEエンコードしてない
 });
 
-$app->get('/v2/music', function () use ($app) {
+$app->get('/music', function () use ($app) {
     $input = $app->request()->get();
 
     if (!issetAllParams($input, array("moodid", "userid"))) {
