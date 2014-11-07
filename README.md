@@ -1,8 +1,5 @@
 # NCFのAPI
 
-## ＊注意＊
-ドメインは153.121.51.112です。192.168.56.14を書き直して利用してください。
-
 ## すれ違いAPI
 #### Request
 * user_id : ユーザのid
@@ -36,7 +33,7 @@ curl http://192.168.56.14/meet?user_id=3RWoUwexIC\&start_date=2014-11-03%2002:09
 * userid : ユーザのid
 
 #### EXAMPLE
-curl http://192.168.56.14/music?moodid=65326\&userid=iFtJtDtEW1 | json_pp
+curl http://153.121.51.112/NCF_parse_api/music?moodid=65326&userid=iFtJtDtEW1 | json_pp
 ```
 {
    "status" : "success",
@@ -60,7 +57,7 @@ curl http://192.168.56.14/music?moodid=65326\&userid=iFtJtDtEW1 | json_pp
 * userid : ユーザのid
 
 #### EXAMPLE
-curl http://192.168.56.14/v2/music?timeid=0\&userid=iFtJtDtEW1 | json_pp
+curl http://153.121.51.112/NCF_parse_api/v2/music\?timeid\=0\&userid\=iFtJtDtEW1 | json_pp
 ```
 {
    "status" : "success",
