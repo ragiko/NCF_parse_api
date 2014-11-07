@@ -12,7 +12,9 @@ use Parse\ParsegeoPoint;
 
 ParseClient::initialize('LicvGZYQ3x9rDtfiDnaNy42GmIJdP0TuoVBJBFZi', 'QmaCbGyfU0chwYJ4n77cM1lv3pZeeVxNfa0FGrLE', 'pwLv0m1SioJBnuqlI3mvZ0Cv6jDRoC0BIRImMgGO');
 // ParseClientのデフォルトのtimestampがUTCのため
+
 date_default_timezone_set('UTC');
+
 
 $app->get('/meet', function () use ($app) {
     // Sample input data
@@ -57,7 +59,7 @@ $app->get('/meet', function () use ($app) {
     $query->EqualTo("user", $my_user);
     $user_geo_objects = $query->find();
 
-    $between_min = 5; // 5分間隔
+    $between_min = 8; // 10分間隔
 
     // GeoObjectの数をよしなに減らす
     $user_geo_objects = cutGeoObjectFromBetweenTime($user_geo_objects, $start_date, $end_date, $between_min);
@@ -66,14 +68,15 @@ $app->get('/meet', function () use ($app) {
     $_query = new ParseQuery("Tag");
 
     $other_user_ids = [];
+    $between_min = 3;
+    $around_kilometer = 1;
+
     // 取得したGPSデータごとに時間と距離の近いユーザを算出
     foreach ($user_geo_objects as $user_geo_object) {
         $query = $_query;
 
         $date = $user_geo_object->getCreatedAt();
         $user_geo_pt = $user_geo_object->get("location");
-        $between_min = 1;
-        $around_kilometer = 1;
 
         // 時間と距離の近いユーザを算出
         $query = getQueryBetweenMinutes($query, $date, $between_min);
@@ -127,5 +130,24 @@ $app->get('/meet', function () use ($app) {
 
 // test uri
 $app->get('/test', function () use ($app) {
+    // $start_date = new DateTime("2014-11-06 10:19:10"); // DEBUG
+    // $end_date = new DateTime("2014-11-06 21:19:30");   // DEBUG
+    // $user_id = "iFtJtDtEW1";
+
+    // $user_query = ParseUser::query();
+    // $my_user = $user_query->get($user_id);
+
+    // // ユーザの期間内のGPSデータ取得
+    // $query = new ParseQuery("Tag");
+    // $query = getQueryBetweenDate($query, $start_date, $end_date);
+    // $query->EqualTo("user", $my_user);
+    // $geos = $query->find();
+
+    // // after DEBUG
+    // echo '<hr>';
+    // prePr(count($geos));
+    // foreach ($geos as $obj) {
+    //     prePr($obj->getCreatedAt());
+    // }
 });
 

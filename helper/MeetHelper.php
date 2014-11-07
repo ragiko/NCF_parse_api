@@ -8,6 +8,7 @@ function getQueryBetweenDate($query, $start_date, $end_date) {
 
     $q->lessThanOrEqualTo("createdAt", $end);
     $q->greaterThanOrEqualTo('createdAt', $start);
+    $q->limit(1000); // default 100
 
     return $q; 
 }
@@ -75,7 +76,7 @@ function cutGeoObjectFromBetweenTime($geo_objects, $start_date, $end_date, $betw
         $index = count($gps_objs_between_date) == 0 ? 0 : floor(count($gps_objs_between_date)/2);
         $simple_gps_objs[] = $gps_objs_between_date[$index];
     }
-    
+
     // // after DEBUG
     // echo '<hr>';
     // prePr(count($simple_gps_objs));
