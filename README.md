@@ -57,7 +57,7 @@ curl http://153.121.51.112/NCF_parse_api/music?moodid=65326&userid=iFtJtDtEW1 | 
 * userid : ユーザのid
 
 #### EXAMPLE
-curl http://153.121.51.112/NCF_parse_api/v2/music\?timeid\=0\&userid\=iFtJtDtEW1 | json_pp
+curl http://153.121.51.112/NCF_parse_api/v2/music?timeid=0&userid=iFtJtDtEW1 | json_pp
 ```
 {
    "status" : "success",
