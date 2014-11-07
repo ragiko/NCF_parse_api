@@ -5,6 +5,7 @@
 * user_id : ユーザのid
 * start_date : 検索したい始めの時間 (2014-11-03%2002:09:24)
 * end_date : 検索したい終わりの時間 (2014-11-03%2002:09:39)
+###### NOTE!! : dateは日本の時刻を渡す
 
 #### EXAMPLE
 curl http://192.168.56.14/meet?user_id=3RWoUwexIC\&start_date=2014-11-03%2002:09:24\&end_date=2014-11-03%2002:09:39 | json_pp
