@@ -129,7 +129,7 @@ $app->get('/meet', function () use ($app) {
 });
 
 // test uri
-$app->get('/test', function () use ($app) {
+$app->get('/test/meet', function () use ($app) {
     // $start_date = new DateTime("2014-11-06 10:19:10"); // DEBUG
     // $end_date = new DateTime("2014-11-06 21:19:30");   // DEBUG
     // $user_id = "iFtJtDtEW1";
