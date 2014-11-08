@@ -107,16 +107,22 @@ $app->get('/meet', function () use ($app) {
         $query = $_query;
         $query->equalTo("user", $user);
         $query->equalTo("share", true);
-        // TODO: 抽出当たりのアルゴリズムを改良、とりあえず全部取る
         $playlist_objects = $query->find();
 
-        foreach ($playlist_objects as $playlist_object) {
+        if (!empty($playlist_objects)) {
+            // ランダムで一つ抽出
+            shuffle($playlist_objects);
+            $playlist_object = $playlist_objects[0];
+
             $user_musics[] = array(
                 "user_id" => $user_id,
                 "artist" => $playlist_object->get("artist_name"),
                 "youtube_id" => $playlist_object->get("youtube_id"),
                 "title" => $playlist_object->get("music_title")
             );
+        }
+
+        foreach ($playlist_objects as $playlist_object) {
         }
     }
 
