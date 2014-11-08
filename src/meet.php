@@ -120,9 +120,20 @@ $app->get('/meet', function () use ($app) {
         }
     }
 
+    // 取得した音楽をPlaylistにインサート
+    try {
+        foreach ($user_musics as $m) {
+            insertMusicByUserId($input_user_id, array(
+                "artist" => $m['artist'],
+                "title" => $m['title'],
+                "youtube_id" => $m['youtube_id']
+            ));
+        }
+    } catch (Exception $e) {
+        echo jsonResponse("PlayListInsertError", array());
+    }
+
     echo jsonResponse("success", $user_musics);
-    
-    // 10秒かかかるww 
 });
 
 // test uri

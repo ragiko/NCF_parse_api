@@ -204,7 +204,16 @@ $app->get('/music', function () use ($app) {
     // TODO UNICODEエンコードしてない
 });
 
-$app->get('/music/test', function () use ($app) {
-    $m = new Mood();
-    prePr($m->chooseNegativeMusicIdByRnd());
+$app->get('/test/music', function () use ($app) {
+    $user_id = "iFtJtDtEW1";
+
+    insertMusicByUserId($user_id, array(
+            "artist" => "test",
+            "title" => "test",
+            "youtube_id" => "test4",
+            "share" => true
+        )
+    );
 });
+
+

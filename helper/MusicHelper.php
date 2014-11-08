@@ -73,15 +73,3 @@ function getVideoId($artist, $musicTitle){
 
 
 
-// プレイリストの中にmusic(youtube id)が存在しているか
-function existPlayList($youtube_id, $play_list_obj) {
-    $exist_youtube_ids = [];
-
-    foreach ($play_list_obj as $music) {
-        $exist_youtube_ids[] = $music->get("youtube_id");
-    }
-
-    // TODO: クラス作るべき
-    return in_array($youtube_id, $exist_youtube_ids);
-}
-
