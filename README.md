@@ -8,7 +8,7 @@
 ###### NOTE!! : dateは日本の時刻を渡す
 
 #### EXAMPLE
-curl http://153.121.51.112/NCF_parse_api/meet?user_id=JxeCVjTuHL\&start_date=2014-11-07%2022:09:24\&end_date=2014-11-07%2023:09:39  | json_pp
+curl http://153.121.51.112/NCF_parse_api/meet?user_id=CWoxzbBF7Q\&start_date=2014-11-07%2022:09:24\&end_date=2014-11-07%2023:09:39  | json_pp
 ```
 {
    "status" : "success",
@@ -36,7 +36,7 @@ curl http://153.121.51.112/NCF_parse_api/meet?user_id=JxeCVjTuHL\&start_date=201
 * userid : ユーザのid
 
 #### EXAMPLE
-curl http://153.121.51.112/NCF_parse_api/music?moodid=65326&userid=iFtJtDtEW1 | json_pp
+curl http://153.121.51.112/NCF_parse_api/music?moodid=65326&userid=CWoxzbBF7Q | json_pp
 ```
 {
    "status" : "success",
@@ -60,7 +60,7 @@ curl http://153.121.51.112/NCF_parse_api/music?moodid=65326&userid=iFtJtDtEW1 | 
 * userid : ユーザのid
 
 #### EXAMPLE
-curl http://153.121.51.112/NCF_parse_api/v2/music?timeid=0&userid=iFtJtDtEW1 | json_pp
+curl http://153.121.51.112/NCF_parse_api/v2/music?timeid=0&userid=CWoxzbBF7Q | json_pp
 ```
 {
    "status" : "success",
